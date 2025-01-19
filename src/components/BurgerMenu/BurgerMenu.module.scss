@@ -1,0 +1,79 @@
+@use '../../styles/_colors.scss' as *;
+
+.burgerMenuContainer {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+}
+
+.burgerMenu {
+  display: flex;
+  align-items: center;
+  z-index: 10;
+}
+
+.burgerButton {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 30px;
+  width: 30px;
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  cursor: pointer;
+  z-index: 10;
+
+  &.open .bar:nth-child(1) {
+    transform: translateY(10px) rotate(45deg);
+  }
+
+  &.open .bar:nth-child(2) {
+    opacity: 0;
+  }
+
+  &.open .bar:nth-child(3) {
+    transform: translateY(-10px) rotate(-45deg);
+  }
+}
+
+.bar {
+  height: 4px;
+  width: 100%;
+  background-color: $black;
+  border-radius: 4px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.menu {
+  display: none;
+  flex-direction: row;
+  list-style: none;
+  padding: 0;
+  margin-left: 10px;
+  z-index: 20;
+
+  &.open {
+    display: flex;
+  }
+}
+
+.navList {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+
+  a {
+    color: $black;
+    text-decoration: none;
+
+    &:hover {
+      color: $secondary-color;
+    }
+
+    &.active {
+      color: $primary-color;
+    }
+  }
+}

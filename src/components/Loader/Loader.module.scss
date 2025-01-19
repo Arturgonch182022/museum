@@ -1,0 +1,8 @@
+@use'../../styles/_colors.scss' as *;
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  color: $primary-color;
+}
