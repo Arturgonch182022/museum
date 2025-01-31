@@ -1,37 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import styles from './FavoriteButton.module.scss';
+import FavoritesStorage from '../../pages/FavoritesPage/FavoritesStorage';
 
 interface FavoriteButtonProps {
     artId: string;
 }
 
+const favoritesStorage = new FavoritesStorage();
+
 const FavoriteButton: React.FC<FavoriteButtonProps> = ({ artId }) => {
-    const [isFavorite, setIsFavorite] = useState(false);
+    const [isFavorite, setIsFavorite] = useState(favoritesStorage.isFavorite(artId));
 
     useEffect(() => {
-        const favorites = JSON.parse(sessionStorage.getItem('favorites') || '[]') as string[];
-        setIsFavorite(favorites.includes(artId));
+        setIsFavorite(favoritesStorage.isFavorite(artId));
     }, [artId]);
 
     const toggleFavorite = () => {
-        const favorites = JSON.parse(sessionStorage.getItem('favorites') || '[]') as string[];
-        let updatedFavorites;
         if (isFavorite) {
-            updatedFavorites = favorites.filter((id) => id !== artId);
+            favoritesStorage.removeFavorite(artId);
         } else {
-            updatedFavorites = [...favorites, artId];
+            favoritesStorage.addFavorite(artId);
         }
-        sessionStorage.setItem('favorites', JSON.stringify(updatedFavorites));
         setIsFavorite(!isFavorite);
     };
 
     return (
-        <button
-            className={`${styles.favoriteButton} ${isFavorite ? styles.active : ''}`}
-            onClick={toggleFavorite}
-        >
-            {isFavorite ? '❤️' : '🤍'}
-        </button>
+      <button
+        className={`${styles.favoriteButton} ${isFavorite ? styles.active : ''}`}
+        onClick={toggleFavorite}
+      >
+          {isFavorite ? '❤️' : '🤍'}
+      </button>
     );
 };
 
