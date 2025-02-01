@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import styles from './ArtDetailsPage.module.scss';
 import {fetchArtDetails} from "../../services/api.ts";
 import Loader from "../../components/Loader/Loader.tsx";
+import FavoriteButton from "../../components/FavoriteButton/FavoriteButton";
 
 const ArtDetailsPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -50,6 +51,7 @@ const ArtDetailsPage: React.FC = () => {
                     <p><strong>Place of Origin:</strong> {artDetails.place_of_origin}</p>
                     <p><strong>Medium:</strong> {artDetails.medium_display}</p>
                 </div>
+                <FavoriteButton artId={String(artDetails.id)} />
             </div>
         </div>
     );
