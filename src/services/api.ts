@@ -1,7 +1,5 @@
 import {IArt} from "../types";
-
-const API_URL = 'https://api.artic.edu/api/v1/artworks';
-//const API_URL = 'https://api.artic.edu/api/v1/artworks?limit=15&page=1';
+import { API_URL } from '../constants';
 
 export const fetchArtData = async (): Promise<IArt[] | null> => {
     try {

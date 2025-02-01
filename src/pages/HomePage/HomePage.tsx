@@ -7,14 +7,14 @@ import Loader from "../../components/Loader/Loader.tsx";
 import ArtCard from "../../components/ArtCard/ArtCard.tsx";
 import Pagination from "../../components/Pagination/Pagination.tsx";
 import {IArt} from "../../types";
-
+import { PAGE_SIZE } from '../../constants';
 
 const HomePage: React.FC = () => {
     const [artData, setArtData] = useState<IArt[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage] = useState(5);
+    const [itemsPerPage] = useState(PAGE_SIZE);
     const [searchTerm, setSearchTerm] = useState('');
     const [sortCriteria, setSortCriteria] = useState<'title' | 'date' | null>(null);
 
