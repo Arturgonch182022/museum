@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styles from './HomePage.module.scss';
-import {fetchArtData} from "../../services/api.ts";
+import { fetchArtData } from "../../services/api.ts";
 import SearchForm from "../../components/SearchForm/SearchForm.tsx";
 import SortButton from "../../components/SortButton/SortButton.tsx";
 import Loader from "../../components/Loader/Loader.tsx";
 import ArtCard from "../../components/ArtCard/ArtCard.tsx";
 import Pagination from "../../components/Pagination/Pagination.tsx";
-import {IArt} from "../../types";
+import { IArt } from "../../types";
 import { PAGE_SIZE } from '../../constants';
 
 const HomePage: React.FC = () => {
@@ -47,10 +47,9 @@ const HomePage: React.FC = () => {
         setCurrentPage(1);
     }, []);
 
-
     const filteredData = React.useMemo(() => {
         return artData.filter((art) =>
-            art.title.toLowerCase().includes(searchTerm.toLowerCase())
+          art.title.toLowerCase().includes(searchTerm.toLowerCase())
         );
     }, [artData, searchTerm]);
 
@@ -69,40 +68,36 @@ const HomePage: React.FC = () => {
     const currentItems = sortedData.slice(indexOfFirstItem, indexOfLastItem);
     const totalPages = Math.ceil(sortedData.length / itemsPerPage);
 
-
-
     const paginate = useCallback((pageNumber: number) => {
         setCurrentPage(pageNumber);
     }, []);
 
     return (
-        <div className={styles.homePage}>
-            <div className={styles.contentWrapper}>
-                <div className={styles.controlPanel}>
-                    <SearchForm onSearch={handleSearch} />
-                    <SortButton onSort={handleSort} sortCriteria={sortCriteria} />
-                </div>
+      <main className={styles.homePage}>
+          <header className={styles.controlPanel}>
+              <SearchForm onSearch={handleSearch} />
+              <SortButton onSort={handleSort} sortCriteria={sortCriteria} />
+          </header>
 
-                {loading ? (
-                    <Loader />
-                ) : error ? (
-                    <p>Error: {error}</p>
-                ) : (
-                    <>
-                        <div className={styles.artGrid}>
-                            {currentItems.map((art) => (
-                                <ArtCard key={art.id} art={art} />
-                            ))}
-                        </div>
-                        <Pagination
-                            totalPages={totalPages}
-                            currentPage={currentPage}
-                            onPageChange={paginate}
-                        />
-                    </>
-                )}
-            </div>
-        </div>
+          {loading ? (
+            <Loader />
+          ) : error ? (
+            <p>Error: {error}</p>
+          ) : (
+            <>
+                <section className={styles.artGrid}>
+                    {currentItems.map((art) => (
+                      <ArtCard key={art.id} art={art} />
+                    ))}
+                </section>
+                <Pagination
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  onPageChange={paginate}
+                />
+            </>
+          )}
+      </main>
     );
 };
 

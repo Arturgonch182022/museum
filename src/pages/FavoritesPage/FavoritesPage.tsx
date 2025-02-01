@@ -23,18 +23,18 @@ const FavoritesPage: React.FC = () => {
     }, []);
 
     return (
-      <div className={styles.favoritesPage}>
+      <main className={styles.favoritesPage}>
           <h2>Favorites</h2>
           {favoriteArt.length > 0 ? (
-            <div className={styles.artGrid}>
+            <section className={styles.artGrid}>
                 {favoriteArt.map((art) => (
                   <ArtCard key={art.id} art={art} />
                 ))}
-            </div>
+            </section>
           ) : (
             <p>No favorite art added.</p>
           )}
-      </div>
+      </main>
     );
 };
 
