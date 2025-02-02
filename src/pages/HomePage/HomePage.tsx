@@ -17,6 +17,7 @@ const HomePage: React.FC = () => {
     const [itemsPerPage] = useState(PAGE_SIZE);
     const [searchTerm, setSearchTerm] = useState('');
     const [sortCriteria, setSortCriteria] = useState<'title' | 'date' | null>(null);
+    const [totalLoaded, setTotalLoaded] = useState(0);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -26,6 +27,7 @@ const HomePage: React.FC = () => {
                 const data = await fetchArtData();
                 if (data) {
                     setArtData(data);
+                    setTotalLoaded(data.length);
                 }
             } catch (err: any) {
                 setError(err.message || 'Failed to fetch art data');
@@ -37,10 +39,46 @@ const HomePage: React.FC = () => {
         fetchData();
     }, []);
 
-    const handleSearch = useCallback((term: string) => {
+    const loadMoreData = useCallback(async () => {
+        const totalPages = Math.ceil(totalLoaded / itemsPerPage);
+        if (currentPage === totalPages && totalLoaded > 0) {
+            const offset = totalLoaded;
+            setLoading(true);
+            try {
+                const newData = await fetchArtData(itemsPerPage, offset);
+                if (newData) {
+                    setArtData(prevData => [...prevData, ...newData]);
+                    setTotalLoaded(prev => prev + newData.length);
+                }
+            } catch (err: any) {
+                setError(err.message || 'Failed to fetch more art data');
+            } finally {
+                setLoading(false);
+            }
+        }
+    }, [currentPage, totalLoaded, itemsPerPage]);
+
+    useEffect(() => {
+        loadMoreData();
+    }, [currentPage, loadMoreData]);
+
+    const handleSearch = useCallback(async (term: string) => {
         setSearchTerm(term);
         setCurrentPage(1);
-    }, []);
+        setLoading(true);
+        setError(null);
+        try {
+            const data = await fetchArtData(itemsPerPage, 0, term);
+            if (data) {
+                setArtData(data);
+                setTotalLoaded(data.length);
+            }
+        } catch (err: any) {
+            setError(err.message || 'Failed to search art data');
+        } finally {
+            setLoading(false);
+        }
+    }, [itemsPerPage]);
 
     const handleSort = useCallback((criteria: 'title' | 'date') => {
         setSortCriteria(criteria);
@@ -66,7 +104,7 @@ const HomePage: React.FC = () => {
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = sortedData.slice(indexOfFirstItem, indexOfLastItem);
-    const totalPages = Math.ceil(sortedData.length / itemsPerPage);
+    const totalPages = Math.ceil(totalLoaded / itemsPerPage);
 
     const paginate = useCallback((pageNumber: number) => {
         setCurrentPage(pageNumber);
@@ -75,7 +113,9 @@ const HomePage: React.FC = () => {
     return (
       <main className={styles.homePage}>
           <header className={styles.controlPanel}>
-              <SearchForm onSearch={handleSearch} />
+              <div className={styles.searchForm}>
+                  <SearchForm onSearch={handleSearch} />
+              </div>
               <SortButton onSort={handleSort} sortCriteria={sortCriteria} />
           </header>
 
