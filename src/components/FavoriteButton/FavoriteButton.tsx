@@ -9,7 +9,9 @@ interface FavoriteButtonProps {
 const favoritesStorage = new FavoritesStorage();
 
 const FavoriteButton: React.FC<FavoriteButtonProps> = ({ artId }) => {
-    const [isFavorite, setIsFavorite] = useState(favoritesStorage.isFavorite(artId));
+    const [isFavorite, setIsFavorite] = useState(
+        favoritesStorage.isFavorite(artId)
+    );
 
     useEffect(() => {
         setIsFavorite(favoritesStorage.isFavorite(artId));
@@ -25,12 +27,12 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ artId }) => {
     };
 
     return (
-      <button
-        className={`${styles.favoriteButton} ${isFavorite ? styles.active : ''}`}
-        onClick={toggleFavorite}
-      >
-          {isFavorite ? '❤️' : '🤍'}
-      </button>
+        <button
+            className={`${styles.favoriteButton} ${isFavorite ? styles.active : ''}`}
+            onClick={toggleFavorite}
+        >
+            {isFavorite ? '❤️' : '🤍'}
+        </button>
     );
 };
 

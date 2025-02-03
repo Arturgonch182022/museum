@@ -6,8 +6,8 @@ interface SortButtonProps {
     sortCriteria: 'title' | 'date' | null;
 }
 
-const SortButton: React.FC<SortButtonProps> = ({onSort, sortCriteria}) => {
-    return(
+const SortButton: React.FC<SortButtonProps> = ({ onSort, sortCriteria }) => {
+    return (
         <div className={styles.sortButton}>
             <button
                 onClick={() => onSort('title')}
@@ -22,7 +22,7 @@ const SortButton: React.FC<SortButtonProps> = ({onSort, sortCriteria}) => {
                 Sort by date
             </button>
         </div>
-    )
+    );
 };
 
-export default SortButton
+export default SortButton;

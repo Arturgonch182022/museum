@@ -5,11 +5,9 @@ const useCloseBurger = () => {
     const menuRef = useRef<HTMLDivElement>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
 
-
     const toggleMenu = useCallback(() => {
         setIsOpen((prev) => !prev);
     }, []);
-
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -35,5 +33,3 @@ const useCloseBurger = () => {
 };
 
 export default useCloseBurger;
-
-

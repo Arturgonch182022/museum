@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styles from './HomePage.module.scss';
-import { fetchArtData } from "../../services/api.ts";
-import SearchForm from "../../components/SearchForm/SearchForm.tsx";
-import SortButton from "../../components/SortButton/SortButton.tsx";
-import Loader from "../../components/Loader/Loader.tsx";
-import ArtCard from "../../components/ArtCard/ArtCard.tsx";
-import Pagination from "../../components/Pagination/Pagination.tsx";
-import { IArt } from "../../types";
+import { fetchArtData } from '../../services/api.ts';
+import SearchForm from '../../components/SearchForm/SearchForm.tsx';
+import SortButton from '../../components/SortButton/SortButton.tsx';
+import Loader from '../../components/Loader/Loader.tsx';
+import ArtCard from '../../components/ArtCard/ArtCard.tsx';
+import Pagination from '../../components/Pagination/Pagination.tsx';
+import { IArt } from '../../types';
 import { PAGE_SIZE } from '../../constants';
 
 const HomePage: React.FC = () => {
@@ -16,7 +16,9 @@ const HomePage: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(PAGE_SIZE);
     const [searchTerm, setSearchTerm] = useState('');
-    const [sortCriteria, setSortCriteria] = useState<'title' | 'date' | null>(null);
+    const [sortCriteria, setSortCriteria] = useState<'title' | 'date' | null>(
+        null
+    );
     const [totalLoaded, setTotalLoaded] = useState(0);
 
     useEffect(() => {
@@ -47,8 +49,8 @@ const HomePage: React.FC = () => {
             try {
                 const newData = await fetchArtData(itemsPerPage, offset);
                 if (newData) {
-                    setArtData(prevData => [...prevData, ...newData]);
-                    setTotalLoaded(prev => prev + newData.length);
+                    setArtData((prevData) => [...prevData, ...newData]);
+                    setTotalLoaded((prev) => prev + newData.length);
                 }
             } catch (err: any) {
                 setError(err.message || 'Failed to fetch more art data');
@@ -62,23 +64,26 @@ const HomePage: React.FC = () => {
         loadMoreData();
     }, [currentPage, loadMoreData]);
 
-    const handleSearch = useCallback(async (term: string) => {
-        setSearchTerm(term);
-        setCurrentPage(1);
-        setLoading(true);
-        setError(null);
-        try {
-            const data = await fetchArtData(itemsPerPage, 0, term);
-            if (data) {
-                setArtData(data);
-                setTotalLoaded(data.length);
+    const handleSearch = useCallback(
+        async (term: string) => {
+            setSearchTerm(term);
+            setCurrentPage(1);
+            setLoading(true);
+            setError(null);
+            try {
+                const data = await fetchArtData(itemsPerPage, 0, term);
+                if (data) {
+                    setArtData(data);
+                    setTotalLoaded(data.length);
+                }
+            } catch (err: any) {
+                setError(err.message || 'Failed to search art data');
+            } finally {
+                setLoading(false);
             }
-        } catch (err: any) {
-            setError(err.message || 'Failed to search art data');
-        } finally {
-            setLoading(false);
-        }
-    }, [itemsPerPage]);
+        },
+        [itemsPerPage]
+    );
 
     const handleSort = useCallback((criteria: 'title' | 'date') => {
         setSortCriteria(criteria);
@@ -87,7 +92,7 @@ const HomePage: React.FC = () => {
 
     const filteredData = React.useMemo(() => {
         return artData.filter((art) =>
-          art.title.toLowerCase().includes(searchTerm.toLowerCase())
+            art.title.toLowerCase().includes(searchTerm.toLowerCase())
         );
     }, [artData, searchTerm]);
 
@@ -96,7 +101,10 @@ const HomePage: React.FC = () => {
         if (sortCriteria === 'title') {
             data.sort((a, b) => a.title.localeCompare(b.title));
         } else if (sortCriteria === 'date') {
-            data.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+            data.sort(
+                (a, b) =>
+                    new Date(a.date).getTime() - new Date(b.date).getTime()
+            );
         }
         return data;
     }, [filteredData, sortCriteria]);
@@ -111,33 +119,33 @@ const HomePage: React.FC = () => {
     }, []);
 
     return (
-      <main className={styles.homePage}>
-          <header className={styles.controlPanel}>
-              <div className={styles.searchForm}>
-                  <SearchForm onSearch={handleSearch} />
-              </div>
-              <SortButton onSort={handleSort} sortCriteria={sortCriteria} />
-          </header>
+        <main className={styles.homePage}>
+            <header className={styles.controlPanel}>
+                <div className={styles.searchForm}>
+                    <SearchForm onSearch={handleSearch} />
+                </div>
+                <SortButton onSort={handleSort} sortCriteria={sortCriteria} />
+            </header>
 
-          {loading ? (
-            <Loader />
-          ) : error ? (
-            <p>Error: {error}</p>
-          ) : (
-            <>
-                <section className={styles.artGrid}>
-                    {currentItems.map((art) => (
-                      <ArtCard key={art.id} art={art} />
-                    ))}
-                </section>
-                <Pagination
-                  totalPages={totalPages}
-                  currentPage={currentPage}
-                  onPageChange={paginate}
-                />
-            </>
-          )}
-      </main>
+            {loading ? (
+                <Loader />
+            ) : error ? (
+                <p>Error: {error}</p>
+            ) : (
+                <>
+                    <section className={styles.artGrid}>
+                        {currentItems.map((art) => (
+                            <ArtCard key={art.id} art={art} />
+                        ))}
+                    </section>
+                    <Pagination
+                        totalPages={totalPages}
+                        currentPage={currentPage}
+                        onPageChange={paginate}
+                    />
+                </>
+            )}
+        </main>
     );
 };
 

@@ -1,7 +1,11 @@
 import { IArt } from '../types';
-const API_URL = 'https://api.artic.edu/api/v1/artworks';
+import { API_URL } from '../constants';
 
-export const fetchArtData = async (limit: number = 15, offset: number = 0, searchTerm: string = ''): Promise<IArt[] | null> => {
+export const fetchArtData = async (
+    limit: number = 15,
+    offset: number = 0,
+    searchTerm: string = ''
+): Promise<IArt[] | null> => {
     try {
         const url = new URL(API_URL);
         url.searchParams.append('limit', String(limit));
@@ -19,8 +23,10 @@ export const fetchArtData = async (limit: number = 15, offset: number = 0, searc
         return data.data.map((item: any) => ({
             id: String(item.id),
             title: item.title,
-            imageUrl: item.image_id ? `https://www.artic.edu/iiif/2/${item.image_id}/full/843,/0/default.jpg` : 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png',
-            date: item.date_start
+            imageUrl: item.image_id
+                ? `https://www.artic.edu/iiif/2/${item.image_id}/full/843,/0/default.jpg`
+                : 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png',
+            date: item.date_start,
         }));
     } catch (error) {
         console.error('Error fetching art data:', error);
@@ -36,8 +42,8 @@ export const fetchArtDetails = async (id: string): Promise<any | null> => {
         }
         const data = await response.json();
         return data.data;
-    } catch(error){
-        console.error(`Error fetching art details with ID ${id}:`, error)
-        return null
+    } catch (error) {
+        console.error(`Error fetching art details with ID ${id}:`, error);
+        return null;
     }
-}
+};

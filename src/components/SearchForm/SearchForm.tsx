@@ -2,7 +2,7 @@ import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import styles from './SearchForm.module.scss';
-import useDebounce from "../../hooks/useDebounce/useDebounce.ts";
+import useDebounce from '../../hooks/useDebounce/useDebounce.ts';
 
 interface SearchFormProps {
     onSearch: (term: string) => void;
