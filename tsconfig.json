@@ -1,5 +1,7 @@
 {
-    "files": [],
+    "files": [
+        "node_modules/jest-fetch-mock/types/index.d.ts"
+    ],
     "references": [
         { "path": "./tsconfig.app.json" },
         { "path": "./tsconfig.node.json" }
@@ -8,11 +10,12 @@
     "compilerOptions": {
         "target": "es6",
         "module": "commonjs",
-        "jsx": "react",
+        "jsx": "react-jsx",
         "esModuleInterop": true,
         "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true
+        "forceConsistentCasingInFileNames": true,
+        "allowImportingTsExtensions": true
     },
-    "include": ["src/**/*"],
+    "include": ["src/**/*","global.d.ts"],
     "exclude": ["node_modules"]
 }

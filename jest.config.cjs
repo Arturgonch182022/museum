@@ -5,6 +5,7 @@ module.exports = {
         '^.+\\.tsx?$': 'ts-jest',
     },
     moduleNameMapper: {
-        '\\.(css|less)$': 'identity-obj-proxy', // Для обработки стилей
+        '\\.(css|less)$': 'identity-obj-proxy',
     },
+    setupFilesAfterEnv: ['<rootDir>/setupTests.ts'], // Добавьте эту строку
 };
