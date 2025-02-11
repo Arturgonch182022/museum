@@ -3,10 +3,9 @@
         "node_modules/jest-fetch-mock/types/index.d.ts"
     ],
     "references": [
-        { "path": "./tsconfig.app.json" },
-        { "path": "./tsconfig.node.json" }
+        { "path": "./tsconfig.app.json"},
+        { "path": "./tsconfig.node.json"}
     ],
-
     "compilerOptions": {
         "target": "es6",
         "module": "commonjs",
@@ -14,8 +13,17 @@
         "esModuleInterop": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
-        "allowImportingTsExtensions": true
+        "composite": true,
+        "noEmit": true,
+        "baseUrl": "src",
+        "paths": {
+            "components/*": ["components/*"],
+            "hooks/*": ["hooks/*"],
+            "pages/*": ["pages/*"],
+            "services/*": ["services/*"],
+            "types/*": ["types/*"]
+        }
     },
-    "include": ["src/**/*","global.d.ts"],
+    "include": ["src/**/*", "global.d.ts"],
     "exclude": ["node_modules"]
 }
